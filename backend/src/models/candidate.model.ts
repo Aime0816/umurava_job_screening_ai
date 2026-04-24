@@ -162,7 +162,6 @@ const CandidateSchema = new Schema<ICandidate>(
 );
 
 // ── Indexes ───────────────────────────────────────────────────
-CandidateSchema.index({ email: 1 }, { unique: true });
 CandidateSchema.index({ 'skills.name': 1 });
 CandidateSchema.index({ location: 1 });
 CandidateSchema.index({ createdAt: -1 });

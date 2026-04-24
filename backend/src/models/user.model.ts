@@ -33,6 +33,4 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword:
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-UserSchema.index({ email: 1 }, { unique: true });
-
 export const User = mongoose.model<IUser>('User', UserSchema);
