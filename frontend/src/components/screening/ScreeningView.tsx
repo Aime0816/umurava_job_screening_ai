@@ -122,7 +122,7 @@ export function ScreeningView() {
         seniority: form.seniority,
         employmentType: form.employmentType,
         scoringWeights: form.scoringWeights,
-        status: 'active',
+        status: 'active' as const,
       };
       const jobAction = await dispatch(createJob(jobData));
       if (createJob.rejected.match(jobAction)) throw new Error(String(jobAction.payload));

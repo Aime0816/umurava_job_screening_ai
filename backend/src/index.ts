@@ -8,10 +8,13 @@ import dotenv from 'dotenv';
 
 import { connectDatabase } from './config/database';
 import { logger } from './config/logger';
+import { authenticate } from './middleware/auth';
 import { errorHandler } from './middleware/errorHandler';
 import { notFoundHandler } from './middleware/notFoundHandler';
+import { ensureAdminUser } from './services/bootstrap-admin.service';
 
 // Route imports
+import authRoutes from './routes/auth.routes';
 import jobRoutes from './routes/job.routes';
 import candidateRoutes from './routes/candidate.routes';
 import screeningRoutes from './routes/screening.routes';
@@ -55,7 +58,7 @@ app.use('/api', (_req, res, next) => {
 app.use(morgan('combined', { stream: { write: (msg) => logger.info(msg.trim()) } }));
 
 // ── Static files (uploaded CVs) ───────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', authenticate, express.static(path.join(__dirname, '../uploads')));
 
 // ── Health check ─────────────────────────────────────────────
 app.get('/health', (_req, res) => {
@@ -68,6 +71,8 @@ app.get('/health', (_req, res) => {
 });
 
 // ── API Routes ───────────────────────────────────────────────
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1', authenticate);
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/v1/candidates', candidateRoutes);
 app.use('/api/v1/screenings', screeningRoutes);
@@ -81,6 +86,7 @@ app.use(errorHandler);
 const startServer = async () => {
   try {
     await connectDatabase();
+    await ensureAdminUser();
     app.listen(PORT, () => {
       logger.info(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
       logger.info(`📊 API available at http://localhost:${PORT}/api/v1`);

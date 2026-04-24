@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { authStorage } from './auth';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL
   ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1`
@@ -12,10 +13,8 @@ export const apiClient = axios.create({
 
 // Request interceptor — attach auth token if present
 apiClient.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('auth_token');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-  }
+  const token = authStorage.getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
@@ -56,6 +55,11 @@ export const screeningsApi = {
   list:       ()              => apiClient.get('/screenings'),
   get:        (id: string)    => apiClient.get(`/screenings/${id}`),
   rankings:   (id: string)    => apiClient.get(`/screenings/${id}/rankings`),
+};
+
+export const authApi = {
+  login: (data: { email: string; password: string }) => apiClient.post('/auth/login', data),
+  me: () => apiClient.get('/auth/me'),
 };
 
 export const uploadApi = {

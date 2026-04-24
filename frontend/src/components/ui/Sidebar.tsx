@@ -47,7 +47,7 @@ const NAV_ITEMS = [
     ),
   },
   {
-     id: 'CCandidates' as const,
+    id: 'candidates' as const,
     label: 'Candidates',
     icon: (
       <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">

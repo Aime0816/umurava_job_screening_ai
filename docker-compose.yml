@@ -33,6 +33,9 @@ services:
       MONGODB_URI: mongodb://mongo:27017/umurava_talent_screening
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       JWT_SECRET: ${JWT_SECRET:-changeme_in_production}
+      ADMIN_NAME: ${ADMIN_NAME:-System Administrator}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@umurava.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@12345}
       ALLOWED_ORIGINS: http://localhost:3000,${FRONTEND_URL:-http://localhost:3000}
     depends_on:
       mongo:

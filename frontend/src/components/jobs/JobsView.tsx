@@ -146,11 +146,11 @@ function JobDetail({ job, onScreen }: { job: Job; onScreen: (j: Job) => void }) 
         <div className="flex flex-wrap gap-1.5">
           {job.requiredSkills.map((s) => <span key={s} className="badge badge-info">{s}</span>)}
         </div>
-        {job.niceToHaveSkills?.length > 0 && (
+        {(job.niceToHaveSkills?.length || 0) > 0 && (
           <>
             <div className="text-[11px] text-white/35 uppercase tracking-wider mt-3 mb-2">Nice to Have</div>
             <div className="flex flex-wrap gap-1.5">
-              {job.niceToHaveSkills.map((s) => <span key={s} className="badge badge-muted">{s}</span>)}
+              {(job.niceToHaveSkills || []).map((s) => <span key={s} className="badge badge-muted">{s}</span>)}
             </div>
           </>
         )}

@@ -50,6 +50,11 @@ export const ScreeningRequestSchema = z.object({
   topCount:     z.number().int().min(1).max(50).default(10),
 });
 
+export const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(128),
+});
+
 export const SkillSchema = z.object({
   name:               z.string().min(1).max(80),
   level:              z.enum(['Beginner', 'Intermediate', 'Advanced', 'Expert']),

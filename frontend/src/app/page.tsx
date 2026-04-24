@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { ProtectedApp } from '@/components/auth/ProtectedApp';
+import { useAuth } from '@/components/auth/AuthProvider';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Topbar } from '@/components/ui/Topbar';
 import { DashboardView } from '@/components/dashboard/DashboardView';
@@ -16,27 +18,32 @@ import { fetchCandidates } from '@/store/slices/candidatesSlice';
 export default function Home() {
   const dispatch = useAppDispatch();
   const activeView = useAppSelector((s) => s.ui.activeView);
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+
     // Hydrate store on mount
     dispatch(fetchScreeningHistory());
     dispatch(fetchJobs());
-    dispatch(fetchCandidates());
-  }, [dispatch]);
+    dispatch(fetchCandidates({}));
+  }, [dispatch, isAuthenticated, isLoading]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0f1117]">
-      <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Topbar />
-        <main className="flex-1 overflow-y-auto">
-          {activeView === 'dashboard'  && <DashboardView />}
-          {activeView === 'screening'  && <ScreeningView />}
-          {activeView === 'rankings'   && <RankingsView />}
-          {activeView === 'candidates' && <CandidatesView />}
-          {activeView === 'jobs'       && <JobsView />}
-        </main>
+    <ProtectedApp>
+      <div className="flex h-screen overflow-hidden bg-[#0f1117]">
+        <Sidebar />
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <Topbar />
+          <main className="flex-1 overflow-y-auto">
+            {activeView === 'dashboard'  && <DashboardView />}
+            {activeView === 'screening'  && <ScreeningView />}
+            {activeView === 'rankings'   && <RankingsView />}
+            {activeView === 'candidates' && <CandidatesView />}
+            {activeView === 'jobs'       && <JobsView />}
+          </main>
+        </div>
       </div>
-    </div>
+    </ProtectedApp>
   );
 }

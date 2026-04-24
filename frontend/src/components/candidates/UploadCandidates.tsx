@@ -61,7 +61,7 @@ const UploadCandidates: React.FC = () => {
     try {
       const response = await uploadApi.files(formData);
       setResult(response.data.data);
-      dispatch(fetchCandidates()); // Refresh list
+      dispatch(fetchCandidates({})); // Refresh list
     } catch (error) {
       console.error('Upload failed:', error);
       setResult({
