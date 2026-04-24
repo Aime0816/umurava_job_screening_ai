@@ -271,8 +271,8 @@ const SAMPLE_CANDIDATES = [
     socialLinks: { linkedin: 'https://linkedin.com/in/henrykagame', github: 'https://github.com/henryk' },
     languages: [{ name: 'English', proficiency: 'Fluent' as const }, { name: 'French', proficiency: 'Conversational' as const }],
     source: 'json' as const,
-  }
-  
+  },
+
   // 12 more diverse candidates (DevOps, Mobile, QA, Product, etc. - following exact schema)
   {
     firstName: 'Isabelle', lastName: 'Bizimana',
@@ -327,8 +327,11 @@ const SAMPLE_CANDIDATES = [
     languages: [{ name: 'English', proficiency: 'Fluent' as const }, { name: 'Kiswahili', proficiency: 'Native' as const }],
     source: 'json' as const,
   },
-  // Added placeholder candidates to reach 20 total for testing (Zoe as #20)
-  // Full 20 now complete
+ // Added placeholder candidates to reach 20 total for testing (Zoe as #20)
+// Full 20 now complete
+  {
+    firstName: 'Zoe',
+    lastName: 'Ndungu',
     email: 'zoe.ndungu@demo.com',
     headline: 'Principal Software Architect',
     location: 'Remote (San Francisco, USA)',
@@ -354,7 +357,6 @@ const SAMPLE_CANDIDATES = [
     source: 'json' as const,
   }
 ];
-
 
 
 

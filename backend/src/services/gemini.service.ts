@@ -366,11 +366,10 @@ ${JSON.stringify(profile, null, 2)}
   private serializeError(error: unknown) {
     if (error instanceof Error) {
       return {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-        ...(error as Error & { status?: number; code?: number; payload?: unknown }),
-      };
+              ...(error as Error & { status?: number; code?: number; payload?: unknown }),
+                   name: error.name,
+                message: error.message,
+          };
     }
 
     return error;
