@@ -150,7 +150,7 @@ function JobDetail({ job, onScreen, onDelete }: { job: Job; onScreen: (j: Job) =
               {[job.department, job.seniority, job.location, job.remote ? 'Remote' : ''].filter(Boolean).join(' · ')}
             </div>
           </div>
-          <button className="btn-ghost btn-xs btn text-red-400 hover:text-red-200" onClick={() => handleDeleteJob(job)}>
+          <button className="btn-ghost btn-xs btn text-red-400 hover:text-red-200" onClick={() => onDelete(job)}>
             Delete
           </button>
         </div>
