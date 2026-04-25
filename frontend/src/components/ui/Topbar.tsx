@@ -4,6 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { setView } from '@/store/slices/uiSlice';
 
+type TopbarProps = {
+  onToggleMenu?: () => void;
+};
+
 const VIEW_TITLES: Record<string, string> = {
   dashboard:  'Dashboard',
   screening:  'New Screening',
@@ -12,22 +16,35 @@ const VIEW_TITLES: Record<string, string> = {
   jobs:       'Jobs',
 };
 
-export function Topbar() {
+export function Topbar({ onToggleMenu }: TopbarProps) {
   const dispatch  = useAppDispatch();
   const view      = useAppSelector((s) => s.ui.activeView);
   const screening = useAppSelector((s) => s.screening.current);
   const { user, logout } = useAuth();
 
   return (
-    <header className="h-[60px] border-b border-white/[0.06] flex items-center px-7 gap-4 flex-shrink-0">
-      <h1 className="font-serif text-lg font-normal tracking-tight">
-        {VIEW_TITLES[view]}
-      </h1>
+    <header className="min-h-[60px] border-b border-white/[0.06] flex flex-wrap items-center gap-3 px-4 py-3 md:px-7 md:py-0">
+      <button
+        type="button"
+        onClick={onToggleMenu}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/80 hover:border-white/20 md:hidden"
+        aria-label="Open navigation menu"
+      >
+        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <path d="M3 6h14" />
+          <path d="M3 10h14" />
+          <path d="M3 14h14" />
+        </svg>
+      </button>
 
-      {/* AI-powered indicator */}
-      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[11px] text-purple-300">
-        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-        Gemini-AI Powered
+      <div className="flex items-center gap-3">
+        <h1 className="font-serif text-lg font-normal tracking-tight">
+          {VIEW_TITLES[view]}
+        </h1>
+        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[11px] text-purple-300">
+          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+          Gemini-AI Powered
+        </div>
       </div>
 
       {screening.status === 'loading' && (
@@ -40,7 +57,7 @@ export function Topbar() {
         </div>
       )}
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex flex-wrap items-center gap-2">
         <div className="hidden items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 md:flex">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-rose-400 text-xs font-semibold text-slate-950">
             {user?.name?.slice(0, 1).toUpperCase() || 'A'}
@@ -50,6 +67,7 @@ export function Topbar() {
             <p className="text-[11px] text-white/45">{user?.email}</p>
           </div>
         </div>
+
         <button
           className="btn-ghost btn btn-sm"
           onClick={() => dispatch(setView('screening'))}

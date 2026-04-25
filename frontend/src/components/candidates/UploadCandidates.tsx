@@ -76,7 +76,7 @@ const UploadCandidates: React.FC = () => {
   }, [files, dispatch]);
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200 max-w-2xl mx-auto">
+    <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200 w-full">
       <h3 className="text-lg font-semibold mb-4">📤 Upload Candidate CVs</h3>
       
       <div 

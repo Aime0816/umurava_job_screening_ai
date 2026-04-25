@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ProtectedApp } from '@/components/auth/ProtectedApp';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { Sidebar } from '@/components/ui/Sidebar';
@@ -19,6 +19,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const activeView = useAppSelector((s) => s.ui.activeView);
   const { isAuthenticated, isLoading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (isLoading || !isAuthenticated) return;
@@ -31,11 +32,12 @@ export default function Home() {
 
   return (
     <ProtectedApp>
-      <div className="flex h-screen overflow-hidden bg-[#0f1117]">
-        <Sidebar />
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <Topbar />
-          <main className="flex-1 overflow-y-auto">
+      <div className="flex min-h-screen w-full overflow-hidden bg-[#0f1117]">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Topbar onToggleMenu={() => setSidebarOpen((open) => !open)} />
+          <main className="flex-1 overflow-y-auto min-w-0">
             {activeView === 'dashboard'  && <DashboardView />}
             {activeView === 'screening'  && <ScreeningView />}
             {activeView === 'rankings'   && <RankingsView />}

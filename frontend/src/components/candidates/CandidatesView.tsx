@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import UploadCandidates from './UploadCandidates';
 
 import { useAppSelector, useAppDispatch } from '@/hooks/useRedux';
-import { fetchCandidates } from '@/store/slices/candidatesSlice';
+import { fetchCandidates, deleteCandidate } from '@/store/slices/candidatesSlice';
 import { Avatar } from '@/components/ui/Avatar';
 import { ScoreRing } from '@/components/ui/ScoreRing';
 import { TierBadge } from '@/components/ui/TierBadge';
@@ -20,6 +21,17 @@ export function CandidatesView() {
 
   useEffect(() => { dispatch(fetchCandidates({})); }, [dispatch]);
 
+  const handleDeleteCandidate = async (id: string) => {
+    if (!window.confirm('Delete this candidate? This action cannot be undone.')) return;
+    const action = await dispatch(deleteCandidate(id));
+    if (deleteCandidate.fulfilled.match(action)) {
+      toast.success('Candidate deleted');
+      setSelected(null);
+    } else {
+      toast.error(action.payload as string || 'Failed to delete candidate');
+    }
+  };
+
   // Merge candidates with AI results if available
   const resultMap = new Map(results.map((r) => [r.candidate._id, r]));
 
@@ -28,8 +40,8 @@ export function CandidatesView() {
     : results.map((r) => ({ candidate: r.candidate, result: r }));
 
   return (
-    <div className="p-7">
-      <div className="grid grid-cols-[1fr_360px] gap-5">
+    <div className="p-4 sm:p-7">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_360px]">
         {/* List */}
         <div className="card">
           <div className="card-header">
@@ -79,7 +91,7 @@ export function CandidatesView() {
         </div>
 
         {/* Detail panel */}
-        <div className="card self-start sticky top-5">
+        <div className="card self-start xl:sticky xl:top-5">
           {!selected ? (
             <div className="p-10 text-center text-white/30">
               <div className="text-3xl mb-3 opacity-40">◎</div>
@@ -87,7 +99,7 @@ export function CandidatesView() {
               <div className="text-xs mt-1">to view their full profile</div>
             </div>
           ) : (
-            <ProfileDetail candidate={selected.candidate} result={selected.result} />
+            <ProfileDetail candidate={selected.candidate} result={selected.result} onDelete={handleDeleteCandidate} />
           )}
         </div>
       </div>
@@ -95,18 +107,26 @@ export function CandidatesView() {
   );
 }
 
-function ProfileDetail({ candidate: c, result: r }: { candidate: Candidate; result?: RankedCandidate }) {
+function ProfileDetail({ candidate: c, result: r, onDelete }: { candidate: Candidate; result?: RankedCandidate; onDelete: (id: string) => Promise<void> }) {
   return (
     <div className="overflow-y-auto max-h-[80vh]">
       {/* Header */}
       <div className="p-5 border-b border-white/[0.06]">
-        <div className="flex items-center gap-3">
-          <Avatar firstName={c.firstName} lastName={c.lastName} size={44} />
-          <div>
-            <div className="font-serif text-xl font-normal">{c.firstName} {c.lastName}</div>
-            <div className="text-xs text-white/45">{c.headline}</div>
-            <div className="text-[11px] text-white/30 mt-0.5">{c.location}</div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Avatar firstName={c.firstName} lastName={c.lastName} size={44} />
+            <div>
+              <div className="font-serif text-xl font-normal">{c.firstName} {c.lastName}</div>
+              <div className="text-xs text-white/45">{c.headline}</div>
+              <div className="text-[11px] text-white/30 mt-0.5">{c.location}</div>
+            </div>
           </div>
+          <button
+            onClick={() => onDelete(c._id)}
+            className="btn-ghost btn-xs btn text-red-400 hover:text-red-200"
+          >
+            Delete
+          </button>
         </div>
         <div className="flex gap-2 mt-3 flex-wrap">
           <span className="badge-muted badge">{c.availability.status}</span>

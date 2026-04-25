@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useAppSelector, useAppDispatch } from '@/hooks/useRedux';
-import { fetchJobs, createJob } from '@/store/slices/jobsSlice';
+import { fetchJobs, createJob, deleteJob } from '@/store/slices/jobsSlice';
 import { setView } from '@/store/slices/uiSlice';
 import { updateForm } from '@/store/slices/screeningSlice';
 import { Job, Seniority } from '@/types';
-import toast from 'react-hot-toast';
 
 export function JobsView() {
   const dispatch = useAppDispatch();
@@ -16,6 +16,17 @@ export function JobsView() {
   const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => { dispatch(fetchJobs()); }, [dispatch]);
+
+  const handleDeleteJob = async (job: Job) => {
+    if (!window.confirm(`Delete job "${job.title}"? This cannot be undone.`)) return;
+    const action = await dispatch(deleteJob(job._id));
+    if (deleteJob.fulfilled.match(action)) {
+      toast.success('Job deleted');
+      setSelected(null);
+    } else {
+      toast.error(action.payload as string || 'Failed to delete job');
+    }
+  };
 
   const handleScreenThisJob = (job: Job) => {
     // Pre-fill the screening form with this job's details
@@ -118,7 +129,7 @@ export function JobsView() {
               <div className="text-xs mt-1">to view details and screen candidates</div>
             </div>
           ) : (
-            <JobDetail job={selected} onScreen={handleScreenThisJob} />
+            <JobDetail job={selected} onScreen={handleScreenThisJob} onDelete={handleDeleteJob} />
           )}
         </div>
       </div>
@@ -128,15 +139,22 @@ export function JobsView() {
   );
 }
 
-function JobDetail({ job, onScreen }: { job: Job; onScreen: (j: Job) => void }) {
+function JobDetail({ job, onScreen, onDelete }: { job: Job; onScreen: (j: Job) => void; onDelete: (j: Job) => void }) {
   return (
     <>
       <div className="p-5 border-b border-white/[0.06]">
-        <div className="font-serif text-xl font-normal mb-1">{job.title}</div>
-        <div className="text-xs text-white/45 mb-3">
-          {[job.department, job.seniority, job.location, job.remote ? 'Remote' : ''].filter(Boolean).join(' · ')}
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="font-serif text-xl font-normal mb-1">{job.title}</div>
+            <div className="text-xs text-white/45 mb-3">
+              {[job.department, job.seniority, job.location, job.remote ? 'Remote' : ''].filter(Boolean).join(' · ')}
+            </div>
+          </div>
+          <button className="btn-ghost btn-xs btn text-red-400 hover:text-red-200" onClick={() => handleDeleteJob(job)}>
+            Delete
+          </button>
         </div>
-        <button className="btn-primary btn w-full justify-center" onClick={() => onScreen(job)}>
+        <button className="btn-primary btn w-full justify-center mt-3" onClick={() => onScreen(job)}>
           Screen Candidates for This Job →
         </button>
       </div>

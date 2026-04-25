@@ -3,6 +3,11 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { setView } from '@/store/slices/uiSlice';
 
+type SidebarProps = {
+  isOpen?: boolean;
+  onClose?: () => void;
+};
+
 const NAV_ITEMS = [
   {
     id: 'dashboard' as const,
@@ -59,45 +64,63 @@ const NAV_ITEMS = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const dispatch = useAppDispatch();
   const activeView = useAppSelector((s) => s.ui.activeView);
 
+  const baseClasses =
+    'fixed inset-y-0 left-0 z-50 w-72 max-w-full transform bg-[#0a0c13] border-r border-white/[0.06] flex flex-col py-5 transition-transform duration-300 shadow-2xl md:static md:translate-x-0 md:w-[220px] md:min-w-[220px]';
+  const visibleClass = isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0';
+
+  const handleNavClick = (id: string) => {
+    dispatch(setView(id as typeof NAV_ITEMS[number]['id']));
+    onClose?.();
+  };
+
   return (
-    <aside className="w-[220px] min-w-[220px] bg-[#0a0c13] border-r border-white/[0.06] flex flex-col py-5">
-      {/* Logo */}
-      <div className="px-5 pb-6 flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center font-mono text-sm font-medium text-white">
-          U
+    <>
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`${baseClasses} ${visibleClass}`}>
+        <div className="px-5 pb-6 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center font-mono text-sm font-medium text-white">
+            U
+          </div>
+          <div className="font-serif text-base font-medium tracking-tight text-white">
+            Umu<span className="text-brand-500">rava</span>
+          </div>
         </div>
-        <div className="font-serif text-[15px] font-medium tracking-tight">
-          Umu<span className="text-brand-500">rava</span>
+
+        <div className="px-3 pb-2 text-[10px] font-medium text-white/30 tracking-widest uppercase mt-1">
+          Workspace
         </div>
-      </div>
 
-      {/* Nav section */}
-      <div className="px-3 pb-2 text-[10px] font-medium text-white/30 tracking-widest uppercase mt-1">
-        Workspace
-      </div>
+        <nav className="space-y-1 px-2">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={`nav-item ${activeView === item.id ? 'active' : ''}`}
+            >
+              <span className={`opacity-70 ${activeView === item.id ? 'opacity-100' : ''}`}>
+                {item.icon}
+              </span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
 
-      {NAV_ITEMS.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => dispatch(setView(item.id))}
-          className={`nav-item ${activeView === item.id ? 'active' : ''}`}
-        >
-          <span className={`opacity-70 ${activeView === item.id ? 'opacity-100' : ''}`}>
-            {item.icon}
-          </span>
-          {item.label}
-        </button>
-      ))}
-
-      {/* Footer */}
-      <div className="mt-auto px-5 pt-4 border-t border-white/[0.06] text-xs text-white/30">
-        <strong className="block text-white/50 font-medium mb-0.5">Umurava Hackathon</strong>
-        Talent Screening v1.0
-      </div>
-    </aside>
+        <div className="mt-auto px-5 pt-4 border-t border-white/[0.06] text-xs text-white/30">
+          <strong className="block text-white/50 font-medium mb-0.5">Umurava Hackathon</strong>
+          Talent Screening v1.0
+        </div>
+      </aside>
+    </>
   );
 }

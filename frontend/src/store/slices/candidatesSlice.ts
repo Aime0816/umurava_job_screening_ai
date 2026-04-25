@@ -37,6 +37,18 @@ export const createCandidates = createAsyncThunk(
   }
 );
 
+export const deleteCandidate = createAsyncThunk(
+  'candidates/delete',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await apiClient.delete(`/candidates/${id}`);
+      return id;
+    } catch (err: unknown) {
+      return rejectWithValue(err instanceof Error ? err.message : 'Failed to delete candidate');
+    }
+  }
+);
+
 const candidatesSlice = createSlice({
   name: 'candidates',
   initialState,
@@ -59,6 +71,12 @@ const candidatesSlice = createSlice({
       })
       .addCase(createCandidates.fulfilled, (state, action) => {
         state.list.unshift(...(Array.isArray(action.payload) ? action.payload : [action.payload]));
+      })
+      .addCase(deleteCandidate.fulfilled, (state, action) => {
+        state.list = state.list.filter((candidate) => candidate._id !== action.payload);
+        if (state.selected?._id === action.payload) {
+          state.selected = null;
+        }
       });
   },
 });

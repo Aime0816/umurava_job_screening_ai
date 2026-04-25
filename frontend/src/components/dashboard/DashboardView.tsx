@@ -36,9 +36,9 @@ export function DashboardView() {
   );
 
   return (
-    <div className="p-7">
+    <div className="p-4 sm:p-7">
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-3.5 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-6">
         {[
           { label: 'Total Screenings',  value: totalScreenings,                badge: 'Active jobs',   badgeClass: 'badge-info' },
           { label: 'Candidates Reviewed', value: candidates.length || allResults.length, badge: 'In pool',    badgeClass: 'badge-muted' },
@@ -55,7 +55,7 @@ export function DashboardView() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-5 mb-5">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-5">
         {/* Recent screenings */}
         <div className="card">
           <div className="card-header">

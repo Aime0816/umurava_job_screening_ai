@@ -151,8 +151,8 @@ export function ScreeningView() {
   const isLoading = status === 'loading';
 
   return (
-    <div className="p-7">
-      <div className="grid grid-cols-[1fr_380px] gap-5">
+    <div className="p-4 sm:p-7">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_380px]">
         {/* Left: Job config */}
         <div className="space-y-4">
           {/* Job Description */}
@@ -246,7 +246,7 @@ export function ScreeningView() {
         </div>
 
         {/* Right: Candidate input */}
-        <div className="space-y-4">
+        <div className="space-y-4 lg:self-start lg:sticky lg:top-5">
           <div className="card">
             <div className="card-header"><span className="card-title">Add Candidates</span></div>
             <div className="card-body">
@@ -272,7 +272,7 @@ export function ScreeningView() {
                     onChange={(e) => setJsonInput(e.target.value)}
                     placeholder={'[\n  {\n    "firstName": "Jane",\n    "lastName": "Doe",\n    "headline": "Backend Engineer",\n    "skills": [...]\n  }\n]'}
                   />
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex flex-col gap-2 mt-2 sm:flex-row">
                     <button className="btn-ghost btn btn-sm flex-1" onClick={parseJson}>Parse JSON</button>
                     <button className="btn-ghost btn btn-sm flex-1" onClick={loadSamples}>Load samples</button>
                   </div>
@@ -299,13 +299,13 @@ export function ScreeningView() {
               {/* Manual tab */}
               {activeTab === 'manual' && (
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <div><label className="form-label">First Name</label><input className="form-input" value={manual.firstName} onChange={(e) => setManual({ ...manual, firstName: e.target.value })} placeholder="Jane" /></div>
                     <div><label className="form-label">Last Name</label><input className="form-input" value={manual.lastName} onChange={(e) => setManual({ ...manual, lastName: e.target.value })} placeholder="Doe" /></div>
                   </div>
                   <div><label className="form-label">Headline</label><input className="form-input" value={manual.headline} onChange={(e) => setManual({ ...manual, headline: e.target.value })} placeholder="Senior Node.js Engineer" /></div>
                   <div><label className="form-label">Skills (comma-separated)</label><input className="form-input" value={manual.skills} onChange={(e) => setManual({ ...manual, skills: e.target.value })} placeholder="Node.js, React, MongoDB" /></div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <div><label className="form-label">Years Experience</label><input className="form-input" type="number" value={manual.yoe} onChange={(e) => setManual({ ...manual, yoe: e.target.value })} /></div>
                     <div><label className="form-label">Location</label><input className="form-input" value={manual.location} onChange={(e) => setManual({ ...manual, location: e.target.value })} placeholder="Kigali, Rwanda" /></div>
                   </div>

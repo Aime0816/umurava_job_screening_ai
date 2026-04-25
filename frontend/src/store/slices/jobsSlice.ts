@@ -25,6 +25,15 @@ export const createJob = createAsyncThunk('jobs/create', async (job: Partial<Job
   }
 });
 
+export const deleteJob = createAsyncThunk('jobs/delete', async (id: string, { rejectWithValue }) => {
+  try {
+    await apiClient.delete(`/jobs/${id}`);
+    return id;
+  } catch (err: unknown) {
+    return rejectWithValue(err instanceof Error ? err.message : 'Failed to delete job');
+  }
+});
+
 const jobsSlice = createSlice({
   name: 'jobs',
   initialState,
@@ -38,7 +47,13 @@ const jobsSlice = createSlice({
       .addCase(fetchJobs.pending, (state) => { state.loading = true; })
       .addCase(fetchJobs.fulfilled, (state, action) => { state.loading = false; state.list = action.payload; })
       .addCase(fetchJobs.rejected, (state) => { state.loading = false; })
-      .addCase(createJob.fulfilled, (state, action) => { state.list.unshift(action.payload); });
+      .addCase(createJob.fulfilled, (state, action) => { state.list.unshift(action.payload); })
+      .addCase(deleteJob.fulfilled, (state, action) => {
+        state.list = state.list.filter((job) => job._id !== action.payload);
+        if (state.selected?._id === action.payload) {
+          state.selected = null;
+        }
+      });
   },
 });
 
