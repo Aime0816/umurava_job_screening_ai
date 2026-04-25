@@ -48,10 +48,11 @@ export class CandidateScreeningService {
   private readonly OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
   private readonly GROQ_MODEL = 'llama-3.1-70b-versatile';
   private readonly OPENROUTER_MODELS = [
-    'meta-llama/llama-3.1-70b-instruct',
-    'mistralai/mixtral-8x7b-instruct',
-    'mistralai/mistral-7b-instruct',
-  ] as const;
+  'meta-llama/llama-3.1-70b-instruct:free',
+  'meta-llama/llama-3.1-8b-instruct:free',
+  'mistralai/mixtral-8x7b-instruct:free',
+  'google/gemma-7b-it:free'
+] as const;
   private readonly MAX_RETRIES = 5;
   private readonly REQUEST_TIMEOUT_MS = 10_000;
 

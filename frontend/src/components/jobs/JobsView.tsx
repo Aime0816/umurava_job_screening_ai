@@ -52,8 +52,8 @@ export function JobsView() {
   };
 
   return (
-    <div className="p-7">
-      <div className="flex items-center justify-between mb-5">
+    <div className="p-4 sm:p-7">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
         <div>
           <h2 className="font-serif text-lg font-normal tracking-tight">Job Listings</h2>
           <p className="text-xs text-white/40 mt-1">{jobs.length} jobs across your workspace</p>
@@ -63,7 +63,7 @@ export function JobsView() {
         </button>
       </div>
 
-      <div className="grid grid-cols-[1fr_380px] gap-5">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_380px]">
         {/* Job list */}
         <div className="space-y-3">
           {loading && (
@@ -121,7 +121,7 @@ export function JobsView() {
         </div>
 
         {/* Detail panel */}
-        <div className="card self-start sticky top-5">
+        <div className="card self-start xl:sticky xl:top-5">
           {!selected ? (
             <div className="p-10 text-center text-white/30">
               <div className="text-3xl mb-3 opacity-40">◎</div>
@@ -243,7 +243,7 @@ function CreateJobModal({ onClose }: { onClose: () => void }) {
             <input className="form-input" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} placeholder="e.g. Engineering" /></div>
           <div><label className="form-label">Required Skills (comma-separated) *</label>
             <input className="form-input" value={form.skills} onChange={(e) => setForm({ ...form, skills: e.target.value })} placeholder="Node.js, React, TypeScript" /></div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div><label className="form-label">Min Experience (yrs)</label>
               <input className="form-input" type="number" min={0} value={form.minExperience} onChange={(e) => setForm({ ...form, minExperience: parseInt(e.target.value) || 0 })} /></div>
             <div><label className="form-label">Seniority</label>

@@ -10,7 +10,7 @@ const PORT = Number(process.env.PORT) || 5000;
 
 export const startServer = async () => {
   try {
-    await connectDatabase();
+    await connectDatabase();   
     await ensureAdminUser();
 
     app.listen(PORT, () => {
