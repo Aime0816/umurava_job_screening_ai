@@ -107,10 +107,10 @@ export default function LoginPage() {
                 {submitting ? 'Signing in...' : 'Enter Workspace'}
               </button>
             </form>
-
+{/* 
             <div className="mt-6 rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4 text-sm text-emerald-100/85">
               Default account: <span className="font-medium">admin@umurava.local</span> / <span className="font-medium">Admin@12345</span>
-            </div>
+            </div> */}
           </div>
         </section>
       </div>
