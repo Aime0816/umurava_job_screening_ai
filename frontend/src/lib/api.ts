@@ -58,7 +58,7 @@ export const screeningsApi = {
 };
 
 export const authApi = {
-  login: (data: { email: string; password: string }) => apiClient.post('/login', data),
+  login: (data: { email: string; password: string }) => apiClient.post('/auth/login', data),
   me: () => apiClient.get('/auth/me'),
 };
 
